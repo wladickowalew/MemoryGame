@@ -29,15 +29,17 @@ def hide_buttons(btn1, btn2):
     blocked = False
 
 
-v = [["A", "B", "D", "G", "U", "F"],
-     ["Y", "H", "Q", "A", "E", "Y"],
-     ["C", "Q", "U", "R", "R", "C"],
-     ["F", "B", "E", "G", "H", "D"]]
+# v = [["A", "B", "D", "G", "U", "F"],
+#      ["Y", "H", "Q", "A", "E", "Y"],
+#      ["C", "Q", "U", "R", "R", "C"],
+#      ["F", "B", "E", "G", "H", "D"]]
+
+v = [["A", "B", "C"], ["B", "C", "A"]]
 
 window = Tk()
 window.title("Память")
 w, h, d = 50, 50, 15
-n, m = 4, 6
+n, m = 2, 3
 fw = w * m + (m + 1) * d
 fh = h * n + (n + 1) * d
 window.geometry(f"{fw}x{fh}")
