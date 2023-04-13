@@ -1,3 +1,4 @@
+import random
 from tkinter import *
 from tkinter.messagebox import askyesno
 from threading import Timer
@@ -16,7 +17,7 @@ def func(event):
             pairs -= 1
             current = None
             if pairs == 0:
-               end_game()
+                end_game()
         else:
             blocked = True
             t = Timer(2, lambda: hide_buttons(current, btn))
@@ -28,7 +29,7 @@ def func(event):
 
 def end_game():
     gamer_over = askyesno(title="Конец игры",
-                 message="Поздровляем, вы победили. Хотите сыграть ещё?")
+                          message="Поздровляем, вы победили. Хотите сыграть ещё?")
     if gamer_over:
         clear_field()
     else:
@@ -36,11 +37,15 @@ def end_game():
 
 
 def clear_field():
-    global current, blocked, pairs
+    global current, blocked, pairs, v
     current, blocked, pairs = None, False, n * m // 2
+    v = create_field(n, m)
     for mas in bs:
         for button in mas:
             button.configure(text=" ")
+    for i in range(n):
+        for j in range(m):
+            bs[i][j].v = v[i][j]
 
 
 def hide_buttons(btn1, btn2):
@@ -51,17 +56,22 @@ def hide_buttons(btn1, btn2):
     blocked = False
 
 
-# v = [["A", "B", "D", "G", "U", "F"],
-#      ["Y", "H", "Q", "A", "E", "Y"],
-#      ["C", "Q", "U", "R", "R", "C"],
-#      ["F", "B", "E", "G", "H", "D"]]
+def create_field(n, m):
+    ALPHA = "QWERTYUIOPASDFGHJKLZXCVBNM"
+    pairs = random.sample(ALPHA, n * m // 2)
+    pairs += pairs
+    random.shuffle(pairs)
+    v = []
+    for i in range(n):
+        mas = [pairs[i * m + j] for j in range(m)]
+        v.append(mas)
+    return v
 
-v = [["A", "B", "C"], ["B", "C", "A"]]
 
 window = Tk()
 window.title("Память")
 w, h, d = 50, 50, 15
-n, m = 2, 3  # чтобы игра работала, хотя бы одно число должно быть чётным
+n, m = 3, 4  # чтобы игра работала, хотя бы одно число должно быть чётным
 pairs = n * m // 2
 fw = w * m + (m + 1) * d
 fh = h * n + (n + 1) * d
@@ -70,6 +80,7 @@ current = None
 blocked = False
 bs = []
 step = 0
+v = create_field(n, m)
 for i in range(n):
     row = []
     for j in range(m):
