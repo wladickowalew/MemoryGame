@@ -4,14 +4,17 @@ from threading import Timer
 
 
 def func(event):
-    global current, blocked
+    global current, blocked, pairs
     if blocked:
         return
     btn = event.widget
     if current:
         btn.configure(text=btn.v)
         if current["text"] == btn["text"]:
+            pairs -= 1
             current = None
+            if pairs == 0:
+                print('game over!')
         else:
             blocked = True
             t = Timer(2, lambda: hide_buttons(current, btn))
@@ -39,7 +42,8 @@ v = [["A", "B", "C"], ["B", "C", "A"]]
 window = Tk()
 window.title("Память")
 w, h, d = 50, 50, 15
-n, m = 2, 3
+n, m = 2, 3  # чтобы игра работала, хотя бы одно число должно быть чётным
+pairs = n * m // 2
 fw = w * m + (m + 1) * d
 fh = h * n + (n + 1) * d
 window.geometry(f"{fw}x{fh}")
