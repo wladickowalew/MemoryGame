@@ -5,16 +5,18 @@ from threading import Timer
 
 def func(event):
     global current, blocked, pairs
+    btn = event.widget
     if blocked:
         return
-    btn = event.widget
+    if btn["text"] != " ":
+        return
     if current:
         btn.configure(text=btn.v)
         if current["text"] == btn["text"]:
             pairs -= 1
             current = None
             if pairs == 0:
-                print('game over!')
+               end_game()
         else:
             blocked = True
             t = Timer(2, lambda: hide_buttons(current, btn))
@@ -22,6 +24,23 @@ def func(event):
     else:
         btn.configure(text=btn.v)
         current = btn
+
+
+def end_game():
+    gamer_over = askyesno(title="Конец игры",
+                 message="Поздровляем, вы победили. Хотите сыграть ещё?")
+    if gamer_over:
+        clear_field()
+    else:
+        window.destroy()
+
+
+def clear_field():
+    global current, blocked, pairs
+    current, blocked, pairs = None, False, n * m // 2
+    for mas in bs:
+        for button in mas:
+            button.configure(text=" ")
 
 
 def hide_buttons(btn1, btn2):
