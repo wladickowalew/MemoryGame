@@ -4,15 +4,17 @@ from threading import Timer
 
 
 def func(event):
-    global current
+    global current, blocked
+    if blocked:
+        return
     btn = event.widget
     if current:
         btn.configure(text=btn.v)
         if current["text"] == btn["text"]:
             current = None
         else:
-            btn.configure(text=btn.v)
-            t = Timer(2, lambda : hide_buttons(current, btn))
+            blocked = True
+            t = Timer(2, lambda: hide_buttons(current, btn))
             t.start()
     else:
         btn.configure(text=btn.v)
@@ -20,9 +22,11 @@ def func(event):
 
 
 def hide_buttons(btn1, btn2):
+    global current, blocked
     btn1.configure(text=" ")
     btn2.configure(text=" ")
     current = None
+    blocked = False
 
 
 v = [["A", "B", "D", "G", "U", "F"],
@@ -38,6 +42,7 @@ fw = w * m + (m + 1) * d
 fh = h * n + (n + 1) * d
 window.geometry(f"{fw}x{fh}")
 current = None
+blocked = False
 bs = []
 step = 0
 for i in range(n):
